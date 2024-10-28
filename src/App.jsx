@@ -8,7 +8,7 @@ function App() {
 
   return (
     <>
-      <OvalStadium/>
+      {/* <OvalStadium/> */}
       <a href='/hello'>
         <button>
           руддщ цщкдв!
