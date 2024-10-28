@@ -1,0 +1,44 @@
+.oval-arena-container {
+  text-align: center;
+}
+
+.oval-arena {
+  position: relative;
+  width: 300px;
+  height: 200px;
+  margin: auto;
+}
+
+.oval-map {
+  width: 100%;
+  height: 100%;
+}
+
+.sector {
+  cursor: pointer;
+  transition: transform 0.3s;
+}
+
+.sector:hover {
+  transform: scale(1.2);
+}
+
+.seats {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  gap: 10px;
+  justify-content: center;
+}
+
+.seat {
+  width: 30px;
+  height: 30px;
+  background-color: gray;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.seat:hover {
+  background-color: green;
+}

@@ -1,0 +1,11 @@
+{
+  "hosting": {
+    "site": "purchase-tickets",
+    "public": "dist",
+    "ignore": [
+      "firebase.json",
+      "**/.*",
+      "**/node_modules/**"
+    ]
+  }
+}
