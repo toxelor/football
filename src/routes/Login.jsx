@@ -12,18 +12,12 @@ const Login = () => {
     const [password, setPassword] = useState('')
     const [snackBar, setSnackBar] = useState({open: false, err: ''})
 
-    useEffect(() => {
-        if(auth?.currentUser) {
-            navigate('../')
-        }
-    }, [])
-
     const loginHandler = async() => {
         if (email === '' || password === '') {
             setSnackBar({open: true, err: 'Пожалуста, заполните все поля'})
         } else {
             try {
-                signInWithEmailAndPassword(auth, email, password)
+                await signInWithEmailAndPassword(auth, email, password)
                 navigate('../')
             } catch (error) {
                 setSnackBar({open: true, err: JSON.stringify(error)})
@@ -45,7 +39,8 @@ const Login = () => {
             await signInWithPopup(auth, googleProvider)
             navigate('../')
         } catch(error) {
-            console.log(error) 
+            console.log(error)
+            setSnackBar({open: true, err: JSON.stringify(error)}) 
         }
     }
 

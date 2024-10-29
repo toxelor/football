@@ -1,5 +1,5 @@
 import { Alert, Snackbar } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../firebase/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
@@ -8,7 +8,7 @@ import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 
 const Register = () => {
     const navigate = useNavigate();
-    console.log(auth?.currentUser)
+
     const registerHandler = async () => {
         if (email === '' || password1 === '' || password2 === '') {
             setSnackBar({open: true, err: 'Пожалуста, заполните все поля'})
@@ -32,6 +32,7 @@ const Register = () => {
             navigate('../')
         } catch(error) {
             console.log(error) 
+            setSnackBar({open: true, err: JSON.stringify(error)})
         }
     }
 
