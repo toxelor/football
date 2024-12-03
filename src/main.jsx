@@ -9,6 +9,8 @@ import App from './App.jsx'
 import Login from './routes/Login.jsx';
 import Register from './routes/Register.jsx';
 import Root from './routes/root.jsx';
+import Game from './routes/Game.jsx';
+import Profile from './routes/Profile.jsx';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +25,20 @@ const router = createBrowserRouter([
     path: "/register",
     element: <Register/>,
   },
+  {
+    path: "/profile",
+    element: <Profile/>
+  },
+  {
+    path: 'game',
+    element: <Game />,
+    children: [
+      {
+        element: <Game />,
+        path: ':id',
+      }
+    ]
+  }
 ]);
 
 createRoot(document.getElementById('root')).render(

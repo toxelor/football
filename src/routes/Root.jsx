@@ -3,10 +3,10 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { db } from '../firebase/firebase'
 import { useEffect, useState } from 'react'
-import { getDocs, collection } from 'firebase/firestore'
+import { getDocs, collection, query, where } from 'firebase/firestore'
 import { openNotification } from '../components/helpers/notification'
 import { message, Select } from 'antd'
-import { getDocData } from '../firebase/docs'
+import { getDocsData } from '../firebase/docs'
 const Root = () => {
     const navigate = useNavigate();
     const logOut = async () => {
@@ -22,11 +22,10 @@ const Root = () => {
     const [leaguesList, setLeaguesList] = useState([])
     const [currentLeague, setCurrentLeague] = useState()
 
-    console.log(teamsList)
 
     const getGamesList = async () => {
         try {
-            const data = await getDocData('games')
+            const data = await getDocsData('games')
             setGamesList(data)
         } catch (error) {
             openNotification({
@@ -38,7 +37,7 @@ const Root = () => {
 
     const getTeamsList = async () => {
         try {
-            const data = await getDocData('teams')
+            const data = await getDocsData('teams')
             const formatedData = data.map((el) => {
                 return {
                     'value': el.id,
@@ -56,7 +55,7 @@ const Root = () => {
 
     const getStadiumsList = async () => {
         try {
-            const data = await getDocData('stadiums')
+            const data = await getDocsData('stadiums')
             const formatedData = data.map((el) => {
                 return {
                     'value': el.id,
@@ -74,7 +73,7 @@ const Root = () => {
 
     const getLeaguesList = async () => {
         try {
-            const data = await getDocData('leagues')
+            const data = await getDocsData('leagues')
             const formatedData = data.map((el) => {
                 return {
                     'value': el.id,
@@ -97,6 +96,30 @@ const Root = () => {
         getLeaguesList()
     }, [])
 
+    useEffect(() => {
+        console.log(currentLeague, currentStadium, currentTeam)
+        let q = query(collection(db, 'games'));
+        if (currentLeague) {
+            q = query(q, where('league', '==', currentLeague))
+        }
+        if (currentStadium) {
+            q = query(q, where('stadium', '==', currentStadium))
+        }
+        if (currentTeam) {
+            q = query(q, or(where('team1', '==', currentTeam), where('team2', '==', currentTeam)))
+        }
+
+        const fetchData = async () => {
+            const querySnapshot = await getDocs(q);
+            const result = querySnapshot?.docs?.map((doc) => ({
+                ...doc.data(), id: doc.id
+            }))
+            setGamesList(result);
+        };
+
+        fetchData()
+    }, [currentLeague, currentStadium, currentTeam])
+
     return(
         <>
             <div className='header'>
@@ -104,7 +127,7 @@ const Root = () => {
                     auth?.currentUser ? 
                     <>
                         <span>
-                            {auth?.currentUser?.displayName ? auth?.currentUser?.displayName : auth?.currentUser?.email.split('@')[0]}
+                            <Link to={'profile'}>{auth?.currentUser?.displayName ? auth?.currentUser?.displayName : auth?.currentUser?.email.split('@')[0]}</Link>
                         </span>
                         <button onClick={logOut}>
                             Выйти
@@ -139,19 +162,22 @@ const Root = () => {
                         placeholder="Стадионы"
                         options={stadiumsList}
                         value={currentStadium}
-                        onChange={(e) => {setCurrentLeague(e)}}
+                        onChange={(e) => {setCurrentStadium(e)}}
                     />
                 </div>
                 <div className='games'>
                     {
                         gamesList?.map((game, index) => (
-                            <div className='gameCard' key={index}>
-                                {game.title} <br />
-                                Лига {game.league} <br />
-                                {game.team1} X {game.team2} <br /> 
-                                На стадионе {game.stadium} <br />
-                                {game.time.split('T')[0]} в {game.time.split('T')[1]} <br />
-                            </div>
+                            <Link to={`/game/${game.id}`}>
+                                <div className='gameCard' key={index}>
+                                    {game.title} <br />
+                                    Лига {game.league} <br />
+                                    {game.team1} X {game.team2} <br /> 
+                                    На стадионе {game.stadium} <br />
+                                    {game.time.split('T')[0]} в {game.time.split('T')[1]} <br />
+                                </div>
+                            </Link>
+
                         ))
                     }
                 </div>

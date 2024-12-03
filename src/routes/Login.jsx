@@ -39,7 +39,6 @@ const Login = () => {
             await signInWithPopup(auth, googleProvider)
             navigate('../')
         } catch(error) {
-            console.log(error)
             setSnackBar({open: true, err: JSON.stringify(error)}) 
         }
     }
