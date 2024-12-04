@@ -15,7 +15,7 @@
 }
 
 .taken {
-    background: var(--accent-secondary-color);
+    background: var(--taken-color);
 }
 
 .bought {
