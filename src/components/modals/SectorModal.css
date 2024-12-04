@@ -1,0 +1,45 @@
+.ant-modal-footer .ant-btn-default{
+    opacity: 0;
+    cursor: default;
+}
+
+.seat {
+    width: 10em; /* поддерживаются любые единицы, в том числе проценты */
+    margin: 1em auto;
+    background: var(--accent-primary-color);
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    margin: 10px 10px;
+    cursor: pointer;
+}
+
+.taken {
+    background: var(--accent-secondary-color);
+}
+
+.bought {
+    background-color: var(--disabled-color);
+}
+
+.seat::after {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.legend {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.legend-fact {
+    display: flex;
+    align-items: center;
+}
+
+.legend-fact p{
+    margin: 0;
+}

@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Link, redirect, useNavigate } from "react-router-dom";
 import { auth, googleProvider } from "../firebase/firebase";
 import { createUserWithEmailAndPassword, signInWithPopup } from "firebase/auth";
+import { Button, Input } from "antd";
 
 
 
@@ -50,41 +51,41 @@ const Register = () => {
     const [snackBar, setSnackBar] = useState({open: false, err: ''})
 
     return (
-    <div style={{
-        display: "flex",
-        flexDirection: 'column'
-    }}>
-        <input
-            placeholder="Электронная почта" 
-            required 
-            onChange={(e) => {
-                setEmail(e.target.value)
-            }}
-        />
-        <input 
-            placeholder="Пароль" 
-            required 
-            onChange={(e) => {
-                setPassword1(e.target.value)
-            }}
-        />
-        <input 
-            placeholder="Подтвердите пароль" 
-            required 
-            onChange={(e) => {
-                setPassword2(e.target.value)
-            }}
-        />
-        <button onClick={registerHandler}>
-            Зарегистрироваться
-        </button>
-        <p>
-            Или
-        </p>
-        <button onClick={googleHandler}>
-            Войти с Google
-        </button>
-        <span><Link to='../login'>Войти</Link></span>
+    <div className="login-wrapper">
+        <div className="login-card-wrapper">
+            <div className="login-card-input-div">
+                <Input
+                    placeholder="Электронная почта" 
+                    required 
+                    onChange={(e) => {
+                        setEmail(e.target.value)
+                    }}
+                />
+                <Input 
+                    placeholder="Пароль" 
+                    required 
+                    type="password"
+                    onChange={(e) => {
+                        setPassword1(e.target.value)
+                    }}
+                />
+                <Input 
+                    placeholder="Подтвердите пароль" 
+                    required 
+                    type="password"
+                    onChange={(e) => {
+                        setPassword2(e.target.value)
+                    }}
+                />
+                <Button className="basic-button" onClick={registerHandler}>
+                    Зарегистрироваться
+                </Button>
+            </div>
+            <Button className="google-button" onClick={googleHandler}>
+                Войти с Google
+            </Button>
+            <span className="switch"><Link to='../login'>Войти</Link></span>
+        </div>
         <Snackbar anchorOrigin={{ horizontal: 'right', vertical: 'top' }} open={snackBar.open} autoHideDuration={3000} onClose={handleClose}>
             <Alert
             onClose={handleClose}

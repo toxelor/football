@@ -1,0 +1,100 @@
+.game-wrapper {
+    padding: 10px 20px;
+    background: linear-gradient( rgba(255, 255, 255, 0.579), rgba(255, 255, 255, 0.673) ), url("/backGrroung.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.game-title {
+    font-size: 30px;
+    font-family: var(--accent-font);
+    font-weight: 700;
+    color: var(--additional-color);
+    margin: 0;
+}
+
+.field-img {
+    width: 700px;
+    height: 350px;
+}
+
+.field-ticket-wrapper {
+    display: flex;
+    gap: 30px;
+    align-items: start;
+}
+
+.sector-section {
+    display: flex;
+    flex-wrap: wrap;
+    width: 700px;
+    height: 200px;
+    gap: 10px;
+    margin: 10px 0;
+}
+
+.sector {
+    display: flex; 
+    align-items: center;
+    justify-content: center;
+    min-width: 250px;
+    flex: 1;
+    background-color: var(--additional-color);
+    color: #fff;
+    transition: 500ms;
+    cursor: pointer;
+    font-family: var(--main-text-font);
+    flex-direction: column;
+}
+
+.sector p {
+    margin: 0;
+}
+
+.top:nth-child(-n + 1) {
+    border-top-left-radius: 10px;
+}
+
+.bottom:nth-last-child(-n + 1) {
+    border-bottom-right-radius: 10px;
+}
+
+.sector:hover {
+    transform: scale(1.05);
+}
+
+.taken-places-wrapper {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    font-size: 20px;
+    font-family: var(--accent-font);
+    color: var(--main-bg-color);
+    gap: 20px
+}
+
+.taken-places-wrapper p {
+    margin: 0;
+}
+
+.taken-places-header {
+    font-size: 35px;
+    font-weight: 500;
+    color: var(--additional-color);
+}
+
+.taken-places {
+    display: flex;
+    align-items: start;
+    flex-direction: column;
+    gap: 10px
+}
+
+.payment-button {
+    background-color: var(--accent-primary-color);
+    padding: 20px 20px;
+}
+
+.payment-button span {
+    font-size: 20px;
+}

@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
-import { CButton, CModal, CModalBody, CModalHeader, CModalTitle, CModalFooter, CForm, CFormInput } from '@coreui/react';
-import { Flex, Input, Typography, DatePicker, Modal } from 'antd';
-import { openNotification } from '../helpers/notification';
+import { Modal } from 'antd';
+import './SectorModal.css'
 
 
 const SectorModal = ({ open, setOpen, currentSector, placesArray, setPlacesArray, takenPlaces, setTakenPlaces, totalPrice, setTotalPrice, gameInfo }) => {
@@ -45,53 +44,34 @@ const SectorModal = ({ open, setOpen, currentSector, placesArray, setPlacesArray
         <Modal 
             title={`Сектор: ${name}`}
             open={open}
+            okText='Ок'
             onCancel={() => { setOpen(false) }}
             onOk={() => { setOpen(false) }}>
             <div style={{display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`}}>
-                        {
-                            seats && seats.map((row, rowIndex) => (
-                                row.map((column, columnIndex) => (
-                                    <button disabled={column === 'bought'} key={`${rowIndex}` + `${columnIndex}`} onClick={() => handleSeatClick(rowIndex, columnIndex)}>
-                                        {column}
-                                    </button>
-                                ))
-                            ))
-                        }
-                    </div>
+                {
+                    seats && seats.map((row, rowIndex) => (
+                        row.map((column, columnIndex) => (
+                            <div className={`seat ${column === 'bought' ? 'bought' : column === 'taken' ? 'taken' : 'free'}`} disabled={column === 'bought'} key={`${rowIndex}` + `${columnIndex}`} onClick={() => handleSeatClick(rowIndex, columnIndex)}>
+                            </div>
+                        ))
+                    ))
+                }
+            </div>
+            <div className='legend'>
+                <div className='legend-fact'>
+                    <div className='seat free'></div>
+                    <p> - свободное место</p>
+                </div>
+                <div className='legend-fact'>
+                    <div className='seat taken'></div>
+                    <p> - выбранное вами место</p>
+                </div>
+                <div className='legend-fact'>
+                    <div className='seat bought'></div>
+                    <p> - уже купленное место</p>
+                </div>
+            </div>
         </Modal>
-        //         {/* <CModal
-        //     alignment="center"
-        //     visible={open}
-        //     aria-labelledby="VerticallyCenteredExample"
-        //     onClose={() => { setOpen(false) }}
-        // >
-        //     <CModalHeader>
-        //         <CModalTitle id="VerticallyCenteredExample">Сектор: {name}</CModalTitle>
-        //     </CModalHeader>
-        //     <CModalBody style={{ display: 'flex', justifyContent: 'center', flexDirection : 'column' }}>
-        //         <Flex vertical gap={16}>
-        //             <div style={{display: 'grid', gridTemplateColumns: `repeat(${columns}, 1fr)`}}>
-        //                 {
-        //                     seats && seats.map((row, rowIndex) => (
-        //                         row.map((column, columnIndex) => (
-        //                             <button key={`${rowIndex}` + `${columnIndex}`} onClick={() => alert(`row: ${rowIndex + 1}, column: ${columnIndex + 1}`)}>
-        //                                 {column}
-        //                             </button>
-        //                         ))
-        //                     ))
-        //                 }
-        //             </div>
-        //         </Flex>
-        //     </CModalBody> */}
-        //     {/* <CModalFooter>
-        //         <CButton className='text-light' color="secondary" onClick={() => {
-        //             setOpen(false)
-        //         }}>
-        //             Закрыть
-        //         </CButton>
-        //         <CButton className='text-light' color="primary">Сохранить</CButton>
-        //     </CModalFooter> */}
-        // {/* </CModal> */}
     )
 }
 

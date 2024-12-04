@@ -3,16 +3,14 @@ import { signOut } from 'firebase/auth'
 import { auth } from '../firebase/firebase'
 import { db } from '../firebase/firebase'
 import { useEffect, useState } from 'react'
-import { getDocs, collection, query, where } from 'firebase/firestore'
+import { getDocs, collection, query, where, or } from 'firebase/firestore'
 import { openNotification } from '../components/helpers/notification'
-import { message, Select } from 'antd'
+import { Button, message, Select, Spin } from 'antd'
 import { getDocsData } from '../firebase/docs'
+import Header from '../components/header/header'
+import './Root.css'
+// import { first } from '/1pic.webp'
 const Root = () => {
-    const navigate = useNavigate();
-    const logOut = async () => {
-        await signOut(auth)
-        navigate('/')
-    }
 
     const [gamesList, setGamesList] = useState([])
     const [teamsList, setTeamsList] = useState([])
@@ -21,13 +19,17 @@ const Root = () => {
     const [currentStadium, setCurrentStadium] = useState()
     const [leaguesList, setLeaguesList] = useState([])
     const [currentLeague, setCurrentLeague] = useState()
+    const [gamesLoading, setGamesLoading] = useState(false)
 
 
     const getGamesList = async () => {
         try {
+            setGamesLoading(true)
             const data = await getDocsData('games')
             setGamesList(data)
+            setGamesLoading(false)
         } catch (error) {
+            setGamesLoading(false)
             openNotification({
                 type: 'error',
                 message: JSON.stringify(error)
@@ -40,7 +42,7 @@ const Root = () => {
             const data = await getDocsData('teams')
             const formatedData = data.map((el) => {
                 return {
-                    'value': el.id,
+                    'value': el.name,
                     'label': el.name
                 }
             })
@@ -58,7 +60,7 @@ const Root = () => {
             const data = await getDocsData('stadiums')
             const formatedData = data.map((el) => {
                 return {
-                    'value': el.id,
+                    'value': el.name,
                     'label': el.name
                 }
             })
@@ -76,7 +78,7 @@ const Root = () => {
             const data = await getDocsData('leagues')
             const formatedData = data.map((el) => {
                 return {
-                    'value': el.id,
+                    'value': el.name,
                     'label': el.name
                 }
             })
@@ -97,7 +99,7 @@ const Root = () => {
     }, [])
 
     useEffect(() => {
-        console.log(currentLeague, currentStadium, currentTeam)
+        setGamesLoading(true)
         let q = query(collection(db, 'games'));
         if (currentLeague) {
             q = query(q, where('league', '==', currentLeague))
@@ -110,11 +112,20 @@ const Root = () => {
         }
 
         const fetchData = async () => {
-            const querySnapshot = await getDocs(q);
-            const result = querySnapshot?.docs?.map((doc) => ({
-                ...doc.data(), id: doc.id
-            }))
-            setGamesList(result);
+            try {
+                const querySnapshot = await getDocs(q);
+                const result = querySnapshot?.docs?.map((doc) => ({
+                    ...doc.data(), id: doc.id
+                }))
+                setGamesLoading(false)
+                setGamesList(result);
+            } catch (error) {
+                setGamesLoading(false)
+                openNotification({
+                    type: 'error',
+                    message: JSON.stringify(error)
+                })
+            }
         };
 
         fetchData()
@@ -122,27 +133,9 @@ const Root = () => {
 
     return(
         <>
-            <div className='header'>
-                {
-                    auth?.currentUser ? 
-                    <>
-                        <span>
-                            <Link to={'profile'}>{auth?.currentUser?.displayName ? auth?.currentUser?.displayName : auth?.currentUser?.email.split('@')[0]}</Link>
-                        </span>
-                        <button onClick={logOut}>
-                            Выйти
-                        </button>
-                    </>
-                    :
-                    <>
-                        <Link to='login'>Войти</Link>
-                        <br/>
-                        <Link to='register'>Зарегистрироваться</Link>
-                    </>
-                }
-            </div>
+            <Header/>
             <div className='main-wrapper'>
-                <div className='filters' style={{display: 'flex'}}>
+                <div className='filters'>
                     <Select 
                         style={{width: '100%'}} 
                         placeholder="Команды"
@@ -164,21 +157,43 @@ const Root = () => {
                         value={currentStadium}
                         onChange={(e) => {setCurrentStadium(e)}}
                     />
+                    <Button className='basic-button action-button' onClick={() => {
+                        setCurrentLeague()
+                        setCurrentStadium()
+                        setCurrentTeam()
+                    }}>
+                        Сбросить фильтры
+                    </Button>
                 </div>
                 <div className='games'>
                     {
+                        gamesLoading ? <Spin className="game-content-wrapper-info" />
+                        :
+                        gamesList?.length > 0 ?
                         gamesList?.map((game, index) => (
-                            <Link to={`/game/${game.id}`}>
+                            <Link to={`/game/${game.id}`} style={{width: '20vw'}} key={index}>
                                 <div className='gameCard' key={index}>
-                                    {game.title} <br />
-                                    Лига {game.league} <br />
-                                    {game.team1} X {game.team2} <br /> 
-                                    На стадионе {game.stadium} <br />
-                                    {game.time.split('T')[0]} в {game.time.split('T')[1]} <br />
+                                    <div className='gameCard-img-wrapper'> 
+                                        <img className='gameCard-img' src={`/${game.title.length % 5 + 1}pic.webp`}/>
+                                    </div>
+                                    <div className='gameCard-content'>
+                                        <p className='gameCard-title'>{game.title}</p>
+                                        <p>Лига: {game.league}</p>
+                                        <p>{game.team1} - {game.team2}</p>
+                                        <p>На стадионе {game.stadium}</p>
+                                        <p>{game.time.split('T')[0]} в {game.time.split('T')[1]}</p>
+                                    </div>
+
                                 </div>
                             </Link>
 
                         ))
+                        :
+                        <div className="game-content-wrapper-info">
+                            <p>
+                                Нет подходящих игр
+                            </p>
+                        </div>
                     }
                 </div>
             </div>

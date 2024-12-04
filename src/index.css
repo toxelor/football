@@ -1,0 +1,124 @@
+html {
+    --header-font: "Oswald", serif;
+    --main-text-font: "PT Sans", serif;
+    --accent-font: "Montserrat", sans-serif;
+    --main-bg-color: #2D2D2D;
+    --content-color: #FFFFFF;
+    --accent-primary-color: #4A90E2;
+    --accent-secondary-color: #FFC107;
+    --additional-color: #1B5E20;
+    --disabled-color: #70798C;
+}
+
+body {
+    background-color: var(--content-color);
+    margin: 0;
+}
+
+span, p {
+    font-family: var(--main-text-font);
+    font-size: 14px;
+}
+
+a {
+    font-family: var(--main-text-font);
+    font-size: 14px;
+    color: var(--accent-secondary-color);
+    text-decoration: none;
+}
+
+.basic-button { 
+    font-family: var(--accent-font);
+    font-size: 14px;
+    color: var(--content-color);
+    background-color: var(--disabled-color);
+    border: none;
+}
+
+.action-button { 
+    background-color: var(--accent-secondary-color);
+}
+
+.action-button:hover { 
+    font-family: var(--accent-font);
+    font-size: 14px;
+    color: var(--content-color);
+    background-color: var(--disabled-color);
+    border: none;
+}
+
+.games {
+    padding: 0 20px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px
+}
+
+.gameCard {
+    width: 24vw;
+    box-sizing: border-box;
+    border-radius: 15px;
+    overflow: hidden;
+    background-color: var(--main-bg-color);
+    transition: 1000ms;
+}
+
+.gameCard:hover .gameCard-img {
+    transform: scale(1.5);
+}
+
+.gameCard:hover {
+    transform: scale(1.02);
+}
+
+.gameCard p {
+    margin: 0;
+}
+
+.gameCard-img-wrapper {
+    width: 24vw;
+    height: 200px;
+    overflow: hidden;
+}
+
+.gameCard-img {
+    width: 24vw;
+    height: 200px;
+    object-fit: fill;
+    transition: 1000ms;
+}
+
+.gameCard-content {
+    padding: 10px 10px;
+    color: #C6F91F;
+}
+
+.gameCard-title {
+    font-family: var(--header-font);
+    font-size: 2em;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.filters {
+    display: flex;
+    gap: 10px;
+    padding: 20px 20px;
+}
+
+.game-content-wrapper-info {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 95vw;
+    height: 75vh;
+}
+
+.game-content-wrapper-info p {
+    font-size: 35px;
+    background-color: var(--main-bg-color);
+    color: var(--content-color);
+    padding: 20px 20px;
+    border-radius: 10px;
+}
